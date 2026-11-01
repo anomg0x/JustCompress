@@ -1,0 +1,2 @@
+# JustCompress
+Simple JS compresser.
