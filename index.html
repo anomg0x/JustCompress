@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JustCompress</title>
+    <!-- Tailwind CSS for layout & dark theme utility classes -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Compression Logic -->
+    <script src="script.js" defer></script>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col font-sans">
+    <header class="bg-gray-800 shadow-md py-4 border-b border-gray-700">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-3xl font-bold text-blue-400">JustCompress</h1>
+            <p class="text-gray-400 mt-1 text-sm">Fast image compression — Client-side & Go backend</p>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Drag & Drop Zone -->
+        <div id="drop-zone" class="border-2 border-dashed border-gray-600 rounded-xl p-12 text-center bg-gray-800 hover:bg-gray-750 transition cursor-pointer mb-8">
+            <input type="file" id="file-input" class="hidden" accept="image/jpeg, image/png, image/webp">
+            <div class="text-gray-300 pointer-events-none">
+                <svg class="mx-auto h-12 w-12 mb-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                <p class="text-xl font-medium">Drag and drop an image here</p>
+                <p class="text-sm text-gray-500 mt-2">or click to browse files (JPG, PNG, WEBP)</p>
+            </div>
+        </div>
+
+        <!-- Controls Section -->
+        <div id="controls-section" class="hidden bg-gray-800 rounded-xl p-6 mb-8 shadow-lg border border-gray-700">
+            <!-- Engine Toggle -->
+            <div class="mb-4 flex items-center justify-between bg-gray-900 p-3 rounded-lg border border-gray-700">
+                <span class="text-sm font-medium text-gray-300">Compression Engine</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="server-toggle" class="sr-only peer">
+                    <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-500"></div>
+                    <span class="ml-3 text-sm font-medium text-gray-300" id="engine-text">Client-side (Browser)</span>
+                </label>
+            </div>
+
+            <!-- Mode Toggle -->
+            <div class="mb-4 flex items-center justify-between bg-gray-900 p-3 rounded-lg border border-gray-700">
+                <span class="text-sm font-medium text-gray-300">Compression Mode</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="lossless-toggle" class="sr-only peer">
+                    <div class="w-11 h-6 bg-blue-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500"></div>
+                    <span class="ml-3 text-sm font-medium text-gray-300 peer-checked:text-green-400" id="mode-text">Lossy (Smaller size)</span>
+                </label>
+            </div>
+
+            <!-- Quality Slider -->
+            <div id="slider-container" class="transition-opacity duration-300">
+                <div class="mb-2 flex justify-between items-center">
+                    <label for="quality-slider" class="text-sm font-medium text-gray-300">
+                        Quality Level
+                    </label>
+                    <span id="quality-value" class="text-blue-400 font-bold bg-gray-900 px-3 py-1 rounded-md">80%</span>
+                </div>
+                <input type="range" id="quality-slider" min="10" max="100" value="80" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer mt-4">
+            </div>
+        </div>
+
+        <!-- Previews Section -->
+        <div id="preview-section" class="hidden grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Original Image -->
+            <div class="bg-gray-800 rounded-xl p-5 shadow-lg flex flex-col border border-gray-700">
+                <h3 class="text-lg font-medium mb-3 text-center text-gray-300">Original</h3>
+                <div class="flex-grow flex items-center justify-center bg-gray-900 rounded-lg overflow-hidden mb-4 min-h-[250px] relative transparency-grid">
+                    <img id="original-img" class="max-w-full max-h-64 object-contain z-10" src="" alt="Original">
+                </div>
+                <div class="text-sm text-gray-400 flex justify-between bg-gray-900 px-3 py-2 rounded-md">
+                    <span>Size:</span>
+                    <span id="original-size" class="text-gray-200 font-medium">0 KB</span>
+                </div>
+            </div>
+
+            <!-- Compressed Image -->
+            <div class="bg-gray-800 rounded-xl p-5 shadow-lg flex flex-col border border-gray-700">
+                <h3 class="text-lg font-medium mb-3 text-center text-blue-400">Result</h3>
+                <div class="flex-grow flex items-center justify-center bg-gray-900 rounded-lg overflow-hidden mb-4 min-h-[250px] relative transparency-grid">
+                    <img id="compressed-img" class="max-w-full max-h-64 object-contain z-10" src="" alt="Compressed">
+                </div>
+                <div class="text-sm flex justify-between items-center bg-gray-900 px-3 py-2 rounded-md mb-4">
+                    <span class="text-gray-400">Size: <span id="compressed-size" class="text-green-400 font-bold ml-1">0 KB</span></span>
+                    <span id="savings-badge" class="bg-green-900 text-green-300 px-2 py-1 rounded text-xs font-bold">-0%</span>
+                </div>
+                <button id="download-btn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-lg transition duration-200 shadow-md">
+                    Download Image
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-900 py-6 text-center text-gray-600 text-sm mt-auto">
+        <p>&copy; 2026 JustCompress. Hosted on <a href="https://github.com/anomg0x/JustCompress" class="text-gray-400 hover:text-blue-400 transition" target="_blank">GitHub Pages</a>.</p>
+    </footer>
+</body>
+</html>

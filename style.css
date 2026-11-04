@@ -1,0 +1,50 @@
+/* Background pattern for images with transparency (PNG/WEBP) */
+.transparency-grid {
+    background-color: #111827;
+    background-image: 
+      linear-gradient(45deg, #1f2937 25%, transparent 25%), 
+      linear-gradient(-45deg, #1f2937 25%, transparent 25%), 
+      linear-gradient(45deg, transparent 75%, #1f2937 75%), 
+      linear-gradient(-45deg, transparent 75%, #1f2937 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+
+/* Custom range slider styling for WebKit/Blink (Chrome, Safari, Edge) */
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #60a5fa; /* blue-400 */
+    cursor: pointer;
+    transition: background 0.15s ease-in-out, transform 0.1s;
+}
+
+input[type=range]::-webkit-slider-thumb:hover {
+    background: #3b82f6; /* blue-500 */
+    transform: scale(1.1);
+}
+
+/* Custom range slider styling for Firefox */
+input[type=range]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border: none;
+    border-radius: 50%;
+    background: #60a5fa;
+    cursor: pointer;
+    transition: background 0.15s ease-in-out, transform 0.1s;
+}
+
+input[type=range]::-moz-range-thumb:hover {
+    background: #3b82f6;
+    transform: scale(1.1);
+}
+
+/* Drag & Drop active state overrides */
+.drag-over {
+    border-color: #60a5fa !important;
+    background-color: #374151 !important; /* gray-700 */
+}
