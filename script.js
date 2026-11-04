@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentFile = null;
     let originalImageObj = new Image();
 
-    const GO_SERVER_URL = 'http://localhost:8080';
+    const GO_SERVER_URL = '';
 
     // Engine Toggle Event
     serverToggle.addEventListener('change', (e) => {
